@@ -40,12 +40,10 @@ public class M_ElectionEvent {
 				if (position.equals("P") || position.equals("VP")
 						|| position.equals("GSS") || position.equals("GSC")
 						|| position.equals("GSST"))
-					query = "insert into positions values (" + eid + ",'"
-							+ position + "','all');";
+					query = "insert into positions values (" + eid + ",'"+ position + "','all','all');";
 
 				else
-					query = "insert into positions values (" + eid + ",'"
-							+ position + "','" + position + "');";
+					query = "insert into positions values (" + eid + ",'"+ position + "','" + position + "'," + position +"');";
 				System.out.println(query);
 
 				if (c != null) {

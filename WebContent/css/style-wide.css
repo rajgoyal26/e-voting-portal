@@ -1,0 +1,19 @@
+/**
+
+AUTHOR                   : LNMIIT_ONLINE_VOTING_SYSTEM_TEAM
+LAST MODIFIED DATE       : 17-APRIL-2015
+
+**/
+
+/* Basic */
+
+	body, input, select, textarea {
+		font-size: 14pt;
+	}
+
+/* Section/Article */
+
+	header.special {
+		padding-top: 5.5em;
+		margin-bottom: 4em;
+	}

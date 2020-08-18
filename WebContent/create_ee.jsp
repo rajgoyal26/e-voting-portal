@@ -90,7 +90,7 @@ LAST MODIFIED DATE       : 17-APRIL-2015
 			} 
 
 		// regular expression to match required date format
-		re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+		re = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
 
 		if (document.form.date.value != '' && !document.form.date.value.match(re)) {
 			alert("Invalid date format: " + document.form.date.value);
@@ -99,7 +99,7 @@ LAST MODIFIED DATE       : 17-APRIL-2015
 		}
 
 		// regular expression to match required time format
-		re = /^\d{1,2}:\d{1,2}:\d{1,2}$/;
+		/*re = /((1[0-2]|0?[1-9]):([0-5][0-9]) ?([AaPp][Mm]))/;
 		if (document.form.starttime.value != '' && !document.form.starttime.value.match(re)) {
 			alert("Invalid time format: " + document.form.starttime.value);
 			document.form.starttime.focus();
@@ -113,7 +113,7 @@ LAST MODIFIED DATE       : 17-APRIL-2015
 				document.form.endtime.focus();
 				return false;
 			}
-		
+		*/
 		alert("All input fields have been validated!");
 		return true;
 	}
@@ -200,13 +200,13 @@ LAST MODIFIED DATE       : 17-APRIL-2015
 					</div>
 					<div class="row 50%">
 						<div class="12u">
-							<input type="time" id="starttime" name="starttime"
+							<input type="text" id="starttime" name="starttime"
 								placeholder="Start Time 24 hr format HH:MM:SS" value=""/>
 						</div>
 					</div>
 					<div class="row 50%">
 						<div class="12u">
-							<input type="time" id="endtime" name="endtime"
+							<input type="text" id="endtime" name="endtime"
 								placeholder="End Time 24 hr format HH:MM:SS" value=""/>
 						</div>
 					</div>

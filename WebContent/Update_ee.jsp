@@ -78,7 +78,7 @@
 			}
 			
 		// regular expression to match required date format
-		re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+		re = /^\d{4}\-\d{1,2}\-\d{1,2}$/;
 
 		if (form.date.value != '' && !form.date.value.match(re)) {
 			alert("Invalid date format: " + form.date.value);
@@ -87,13 +87,13 @@
 		}
 
 		// regular expression to match required time format
-		re = /^\d{1,2}:\d{1,2}:\d{1,2}$/;
+		/*re = /^\d{1,2}:\d{1,2}:\d{1,2}$/;
 
 		if (form.starttime.value != '' && !form.starttime.value.match(re)) {
 			alert("Invalid time format: " + form.starttime.value);
 			form.starttime.focus();
 			return false;
-		}
+		}*/
 
 		alert("All input fields have been validated!");
 		return true;
@@ -198,12 +198,12 @@
 					</div>
 					<div class="row 50%">
 						<div class="12u">
-							<input type="time" id="starttime" name="starttime" placeholder="Start Time 24 hr format HH:MM:SS" />
+							<input type="text" id="starttime" name="starttime" placeholder="Start Time 24 hr format HH:MM:SS" />
 						</div>
 					</div>
 					<div class="row 50%">
 						<div class="12u">
-							<input type="time" id="endtime" name="endtime" placeholder="End Time 24 hr format HH:MM:SS" />
+							<input type="text" id="endtime" name="endtime" placeholder="End Time 24 hr format HH:MM:SS" />
 						</div>
 					</div>
 					<div class="row 50%">

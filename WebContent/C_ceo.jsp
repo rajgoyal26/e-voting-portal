@@ -38,12 +38,13 @@
             	page_bit= 1;
                 positions.clear();
                 SimpleDateFormat formatter = new SimpleDateFormat(
-                        "MM/dd/yyyy");
+                        "yyyy-MM-dd");
                 System.out.println(session.getAttribute("fname"));
  
                 EventName = request.getParameter("electionevent");
 
-                System.out.println("testname" + EventName);
+                //System.out.println("testname" + EventName);
+                //System.out.println("date taken from there"+ request.getParameter("date"));
                 date = new java.sql.Date(formatter.parse(
                         request.getParameter("date")).getTime());
  
@@ -112,7 +113,7 @@
                 positions.clear();
  
                 SimpleDateFormat formatter = new SimpleDateFormat(
-                        "MM/dd/yyyy");
+                        "yyyy-MM-dd");
                 System.out.println(session.getAttribute("fname"));
  
                 EventName = request.getParameter("electionevent");
