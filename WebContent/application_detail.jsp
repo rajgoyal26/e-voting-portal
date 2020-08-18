@@ -167,7 +167,8 @@
 						<div class="12u">
 							<div class="buttons">
 								
-								<div><input type="submit" class="special" value="Approve" /></div><br/>																																																																																																																																																																																					
+								<div><input type="button" class="special" value="Approve" onclick="window.location.href = 'C_msg.jsp?ID=0'" /></div><br/>
+								<div><input type="button" class="special" value="Reject" onclick="window.location.href = 'C_msg.jsp?ID=1'" /></div><br/>																																																																																																																																																																																					
 								<div><input type="button" class="special" value="Back" onclick="window.location.href = 'view_applications.jsp'"/></div>
 								
 							</div>

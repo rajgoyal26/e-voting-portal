@@ -113,8 +113,8 @@ public class M_CandidatureApplication {
 		try {
 			c = MySQL.connect();
 			st = c.createStatement();
-			String query = "select rollno from applicants";
-			System.out.println(query+" M_CA.java");
+			String query = "select rollno from applicants where isapproved=0 ";
+			//System.out.println(query+" M_CA.java");
 			rs = st.executeQuery(query);
 
 			while (rs.next()) {
@@ -217,6 +217,31 @@ public class M_CandidatureApplication {
 		}
 
 	}
+	public boolean reject(String rollno) {
+		Connection c = null;
+		Statement st = null;
+		try {
+			c = MySQL.connect();
+			st = c.createStatement();
+			rollno = rollno.toUpperCase();
+			String query = "delete from applicants where rollno ='"
+					+ rollno + "';";
+			System.out.println(query+" M_CA.java");
+			st.executeUpdate(query);
+			st.close();
+			return true;
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return false;
+
+		} finally {
+
+			MySQL.close(c);
+		}
+
+	}
 	public boolean isApplicant(String rollno) {
 
 		Connection c = null;
@@ -264,10 +289,8 @@ public class M_CandidatureApplication {
 		try {
 			c = MySQL.connect();
 			Statement st = c.createStatement();
-			String query = "delete from applicants where rollno = '" + rollno
+			String query = "delete from candidates where rollno = '" + rollno
 					+ "'";
-			System.out.println(query+" M_CA.java");
-			st.executeUpdate(query);
 			st.close();
 			return true;
 

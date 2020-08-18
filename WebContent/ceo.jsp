@@ -174,7 +174,7 @@
 					<section>
 						<header>
 							<h3>
-								<a href="abort.jsp">ABORT ELECTION EVENT</a>
+								<a href=#>ABORT ELECTION EVENT</a>
 							</h3>
 						</header>
 						<p></p>

@@ -71,19 +71,33 @@ int page_bit=0;
     else if(session.getAttribute("fname").equals("application_detail")){
         
     	page_bit=2;
+    	String id = request.getParameter("ID");
         rollno = (String)(session.getAttribute("rollno"));
-        boolean isapproved =CA.approve(rollno);
-        
-        if(isapproved){
-        	
-        	String message="Application_details";
-            response.sendRedirect("Success_CEO.jsp?success="+message);
+        if(id.equals("0")){
+        	boolean isapproved =CA.approve(rollno);
+        	if(isapproved){
+        		System.out.println("application approved");
+            	String message="Application_details";
+                response.sendRedirect("Success_CEO.jsp?success="+message);
+            }
+            else{
+            	System.out.println("error in approving application");
+            	String message="Invalid Entry";
+        		response.sendRedirect("error_page.jsp?error="+message);
+            }
         }
-        
-        else
-        {
-        	String message="Invalid Entry";
-    		response.sendRedirect("error_page.jsp?error="+message);
+        else if(id.equals("1")){
+        	boolean isrejected =CA.reject(rollno);
+        	if(isrejected){
+        		System.out.println("application rejected");
+            	String message="Application_details";
+                response.sendRedirect("Success_CEO.jsp?success="+message);
+            }
+            else{
+            	System.out.println("error in rejecting application");
+            	String message="Invalid Entry";
+        		response.sendRedirect("error_page.jsp?error="+message);
+            }
         }
     }
     
