@@ -1,14 +1,14 @@
-<%@page import="jsp.*,java.util.*"%>
+<%@page import="jsp.*,java.util.*, java.sql.*"%>
 <%@ include file="noCache.jsp"%>
-
-<%@page import="jsp.*,java.sql.*,java.util.*,java.text.*"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<!--
+AUTHOR                   : LNMIIT_ONLINE_VOTING_SYSTEM_TEAM
+LAST MODIFIED DATE       : 17-APRIL-2015
+-->
 
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>View_Candidate_Portfolios- MBM_ONLINE_VOTING_PORTAL</title>
+<title>Apply for Candidature- LNMIIT_ONLINE_VOTING_PORTAL</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -24,7 +24,7 @@
 <script src="js/skel.min.js"></script>
 <script src="js/skel-layers.min.js"></script>
 <script src="js/init.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/skel.css" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/style-wide.css" />
@@ -49,17 +49,9 @@
 	background-size: 75em, 60em, auto, cover;
 }
 </style>
-<script type="text/javascript">
-	function FormValidate()
-	{
-		
-	}
-</script>
-
 </head>
 <body class="contact">
-	<% 
-		session.setAttribute("fname", "view_applications");
+	<%
 		HttpSession session2 = request.getSession(false);
 		if(Session.MultipleSessionCheck((String)session2.getAttribute("user"),(String)session2.getId())==true)
 		{
@@ -67,6 +59,11 @@
 			response.sendRedirect("index.jsp");
 			return;
 		}
+		M_CandidatureApplication CA = new M_CandidatureApplication();
+		int batch = CA.getBatch((String) (session.getAttribute("user")));
+		session.setAttribute("fname", "apply");
+		String EventName=request.getParameter("electionevent");
+		session.setAttribute("EventName",EventName);
 	%>
 
 	<!-- Header -->
@@ -91,7 +88,7 @@
 
 		<header class="container">
 			<!-- <span class="icon fa-envelope"></span>-->
-			<h2 align="center">View Candidates Portfolio</h2>
+			<h2 align="center">APPLY FOR CANDIDATURE</h2>
 			<p></p>
 		</header>
 
@@ -100,41 +97,52 @@
 
 			<!-- Content -->
 			<div class="content">
-					<div class="row 50%">
-						<!--class= 6u 12u(mobile) -->
+				<form name="form" action="C_msg.jsp" method="post">
+					<div class="row">
 						<div class="12u">
-								
-								<%
-									try{
-										Map < String,ArrayList<String> > applications=M_CandidatureApplication.getApplications(1);
-										for (Map.Entry< String,ArrayList<String> > e : applications.entrySet()){
-											String s=e.getKey();
-											System.out.println(s);
-								%>
-								<p><%=s%></p>
-								<%  
-									for (String rollno:e.getValue()){
-										String val = rollno + ":" + s;
-								%>      
-								<div class="content">
-									<div class="12u">
-										<form action="view_cpdetails.jsp" method="post">
-											<input type="text" width ="100" class="buttons" name="rollno" readonly value="<%=rollno%>" id="application" >
-											<button type="submit" name="details" value="<%=val%>">Click Here for details</button>
-										</form>
-									 </div>
-								</div>
-								<%
-									}
-										}
-									}
-									catch (Exception e) {
-										e.printStackTrace();
-									}
-								%>
+							Choose An Event: <input type="text" name="electionevent" readonly value="<%=EventName%>" />		  
 						</div>
 					</div>
+					<div class="row 50%">
+						<div class="12u">
+							Position Applying For: <select id="position" name="position">
+								<option disabled="">Select Position</option>
+								<%!ArrayList<String> Positions = new ArrayList<String>();%>
+								<%
+									M_ElectionEvent EE1= new M_ElectionEvent();
+									int x=EE1.getEEId((request.getParameter("electionevent")));
+									Positions = (ArrayList<String>) (EE1.getPositions(x));
+									for (int i = 0; i < Positions.size(); i++) {
+										String val = Positions.get(i);
+										
+								%>
+								<option value ="<%=val%>"><%=val%></option>
+								<%
+					                }
+								%>
+							</select>
+						</div>
 					</div>
+					<div class="row 50%">
+						<div class="12u">
+							<input type="text" id="agenda" name="agenda" placeholder="Election Agenda" />
+						</div>
+					</div>
+					<div class="row 50%">
+						<div class="12u">
+							<input type="text" id="points" name="points" placeholder="Main Points/Issues" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="12u">
+							<ul class="buttons">
+								<li><input type="submit" class="special" value="Apply" /></li>
+							</ul>
+						</div>
+					</div>
+				</form>
+			</div>
+
 		</section>
 
 	</article>

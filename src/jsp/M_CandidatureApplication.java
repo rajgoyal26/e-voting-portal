@@ -2,6 +2,8 @@ package jsp;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class M_CandidatureApplication {
 
@@ -24,20 +26,15 @@ public class M_CandidatureApplication {
 			while (rs.next()) {
 				batch = rs.getInt(1);
 			}
-
 			rs.close();
 			st.close();
 			return batch;
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
 			return batch;
-
 		} finally {
 			MySQL.close(c);
 		}
-
 	}
 
 	public double getcgpa(String rollno) {
@@ -75,17 +72,14 @@ public class M_CandidatureApplication {
 
 	}
 
-	public boolean createAP(String EventName, String position, String rollno,
-			String name, String email, String phoneno, String gender) {
+	public boolean createAP(String EventName, String position, String rollno, String agenda, String points) {
 		Connection c = null;
 		Statement st = null;
 		rollno=rollno.toUpperCase();
 		try {
 			c = MySQL.connect();
 			st = c.createStatement();
-			String query = "insert into applicants values ('" + EventName
-					+ "','" + position + "',0,'" + rollno + "','" + name
-					+ "','" + email + "','" + phoneno + "','" + gender + "');";
+			String query = "insert into applicants values ('" + EventName + "','" + position + "',0,'" + rollno + "','"+ agenda + "','"+ points + "');";
 			System.out.println(query+" M_CA.java");
 			st.executeUpdate(query);
 
@@ -104,7 +98,6 @@ public class M_CandidatureApplication {
 	}
 
 	public ArrayList<String> getCA() {
-
 		Connection c = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -119,7 +112,7 @@ public class M_CandidatureApplication {
 
 			while (rs.next()) {
 				String t = rs.getString(1);
-				System.out.println(t);
+				//System.out.println(t);
 				r.add(t);
 			}
 
@@ -135,7 +128,7 @@ public class M_CandidatureApplication {
 		}
 	}
 
-	public ArrayList<String> getAD(String rollno) {
+	public ArrayList<String> getAD(String rollno, String eventName) {
 		Connection c = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -146,7 +139,7 @@ public class M_CandidatureApplication {
 			c = MySQL.connect();
 			st = c.createStatement();
 			String query = "select * from applicants where rollno = '" + rollno
-					+ "';";
+					+ "' and eventname ='" + eventName +"';" ;
 			System.out.println(query+" M_CA.java");
 			rs = st.executeQuery(query);
 			rsmd = rs.getMetaData();
@@ -157,9 +150,11 @@ public class M_CandidatureApplication {
 			while (rs.next()) {
 				while (i <= ss) {
 					String t = rs.getString(i);
+					if(t==null)
+						t="add some value";
 					System.out.println(t);
 					i++;
-					if (i == 4 || i == 5)
+					if(i==3||i==4)
 						continue;
 					if (t.equals("P"))
 						t = "President";
@@ -174,21 +169,17 @@ public class M_CandidatureApplication {
 					r.add(t);
 				}
 			}
-
 			rs.close();
 			st.close();
 			return r;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return r;
 		} finally {
 			MySQL.close(c);
 		}
-
 	}
-
-	public boolean approve(String rollno) {
+	public boolean approve(String rollno, String eventName) {
 		Connection c = null;
 		Statement st = null;
 		try {
@@ -196,28 +187,24 @@ public class M_CandidatureApplication {
 			st = c.createStatement();
 			rollno = rollno.toUpperCase();
 			String query = "update applicants set isapproved = 1 where rollno ='"
-					+ rollno + "';";
+					+ rollno + "' and eventname ='" + eventName +"';" ;
 			System.out.println(query+" M_CA.java");
 			st.executeUpdate(query);
-			query = "insert into candidates (rollno, haswon) values ('"
-					+ rollno + "',0);";
+			query = "insert into candidates (rollno, eventname, haswon) values ('"
+					+ rollno +"', '" + eventName + "',0);";
 			System.out.println(query+" M_CA.java");
 			st.executeUpdate(query);
 			st.close();
 			return true;
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
 			return false;
 
 		} finally {
-
 			MySQL.close(c);
 		}
-
 	}
-	public boolean reject(String rollno) {
+	public boolean reject(String rollno, String eventName) {
 		Connection c = null;
 		Statement st = null;
 		try {
@@ -225,7 +212,7 @@ public class M_CandidatureApplication {
 			st = c.createStatement();
 			rollno = rollno.toUpperCase();
 			String query = "delete from applicants where rollno ='"
-					+ rollno + "';";
+					+ rollno + "' and eventname ='" + eventName +"';" ;
 			System.out.println(query+" M_CA.java");
 			st.executeUpdate(query);
 			st.close();
@@ -240,10 +227,8 @@ public class M_CandidatureApplication {
 
 			MySQL.close(c);
 		}
-
 	}
 	public boolean isApplicant(String rollno) {
-
 		Connection c = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -264,47 +249,74 @@ public class M_CandidatureApplication {
 			else{
 				rs.close();
 				st.close();
-				return false;
-				
+				return false;		
 			}
-			
-			
-			
-
-		} catch (Exception e) {
-
+		} 
+		catch (Exception e) {
 			e.printStackTrace();
 			return false;
-
-		} finally {
-
+		} 
+		finally {
 			MySQL.close(c);
 		}
-
 	}
 
-	public boolean deleteAP(String rollno) {
-
+	public boolean deleteAP(String rollno, String eventName) {
 		Connection c = null;
 		try {
 			c = MySQL.connect();
 			Statement st = c.createStatement();
 			String query = "delete from candidates where rollno = '" + rollno
-					+ "'";
+					+ "' and eventname ='" + eventName +"';" ;
+			String query1 = "delete from applicants where isapproved=1 and rollno = '" + rollno
+					+ "' and eventname ='" + eventName +"';" ;
+			st.executeUpdate(query);
+			st.executeUpdate(query1);
 			st.close();
 			return true;
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		} finally {
-
 			MySQL.close(c);
 		}
-
 	}
+	public static Map < String,ArrayList<String> > getApplications(int choice){
+    Connection c = null;
+		Statement st = null;
+		ResultSet rs = null;
+		String rollno;
+		String eventname;
+		Map < String,ArrayList<String> > applications=new HashMap < String,ArrayList<String> >();
+		try {
+			c = MySQL.connect();
+			st = c.createStatement();
+			String query = "select eventname,rollno from applicants where isapproved = "+choice;
+			System.out.println(query);
+			rs = st.executeQuery(query);
+			while(rs.next()){
+				eventname=rs.getString(1);
+				rollno= rs.getString(2);
+				if(applications.containsKey(eventname)){
+					applications.get(eventname).add(rollno);
+				}
+				else{
+					applications.put(eventname,new ArrayList<String>());
+					applications.get(eventname).add(rollno);
+				}	
+			}
+			rs.close();
+			st.close();
+			return applications;
+		} catch (Exception e) {
+		e.printStackTrace();
+		return applications;
+		} finally {
+		MySQL.close(c);
+		}   
+    }
 	
-	public String getRollno(String name){
+/*	public String getRollno(String name){
 		Connection c = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -336,7 +348,5 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 
-	}
-
-	
+	}*/
 }

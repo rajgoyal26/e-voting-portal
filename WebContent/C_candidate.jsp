@@ -65,10 +65,6 @@
 		              
 		          }
 		         
-		        
-		         
-		        	 
-		         
 		      }
 		      System.out.println("email"+email);
 				System.out.println("phone"+phoneno);
@@ -97,11 +93,11 @@
 		else if(session.getAttribute("fname").equals("view_candidate_portfolio")){
 			
 			M_CandidatureApplication CA = new M_CandidatureApplication();
-			String rollno = (String)session.getAttribute("rollno");
-			if(CA.deleteAP(rollno)){
-				
+			String val = (String)session.getAttribute("details");
+			String arr[] = val.split(":");
+			String rollno = arr[0],EventName = arr[1];
+			if(CA.deleteAP(rollno, EventName)){
 				response.sendRedirect("ceo.jsp");
-				
 			}
 			
 		}

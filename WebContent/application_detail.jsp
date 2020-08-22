@@ -107,19 +107,20 @@
 			
 			<%
 			ArrayList<String> applicantdetails = new ArrayList<String>();
-			String rollno = request.getParameter("rollno");
-			session.setAttribute("rollno", rollno);
-			applicantdetails = CA.getAD(rollno);
-				
-			
-			    
+			String val = request.getParameter("details");
+			String arr[] = val.split(":");
+			String rollno = arr[0], eventName = arr[1];
+			session.setAttribute("details", val);
+			applicantdetails = CA.getAD(rollno, eventName);
 				
 				String electionevent = applicantdetails.get(0);
 				String position= applicantdetails.get(1);
-				String name=applicantdetails.get(2);
-				String email=applicantdetails.get(3);
-				String phoneno=applicantdetails.get(4);
-				String gender=applicantdetails.get(5);
+				String name="Name";//applicantdetails.get(2);
+				String email="email@email.com";//applicantdetails.get(3);
+				String phoneno="1234567890";//applicantdetails.get(4);
+				String gender="Male";//applicantdetails.get(5);
+				String agenda=applicantdetails.get(2);
+				String points=applicantdetails.get(3);
 				
 				
 				
@@ -161,6 +162,16 @@
 					<div class="row 50%">
 						<div class="12u">
 							<b>Position:</b><input type="text" name="position" readonly value="<%=position%>" />
+						</div>
+					</div>
+					<div class="row 50%">
+						<div class="12u">
+							<b>Agenda:</b><input type="text" name="agenda" readonly value="<%=agenda%>" />
+						</div>
+					</div>
+					<div class="row 50%">
+						<div class="12u">
+							<b>Points:</b><input type="text" name="points" readonly value="<%=points%>" />
 						</div>
 					</div>
 					<div class="row">

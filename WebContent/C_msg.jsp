@@ -1,3 +1,4 @@
+
 <%@page import="jsp.*,java.sql.*,java.util.*,java.text.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -8,15 +9,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-<% String name = null;
-String email = null;
-String EventName = null;
-String gender = null;
-double cgpa = 0;
-String phoneno = null;
-String rollno = null;
-String position = null;
-int page_bit=0;
+<% 
+	String EventName = null;
+	String rollno = null;
+	String position = null;
+	String agenda = null;
+	String points = null;
+	int page_bit=0;
 
 // 0 default
 // 1 Apply for Candidature
@@ -30,71 +29,59 @@ int page_bit=0;
     String source = request.getPathTranslated();
     System.out.println(source);
     page_bit=1;
-    
     if(session.getAttribute("fname").equals("apply")){
-        name = request.getParameter("name");
-        email = request.getParameter("email");
-        EventName = request.getParameter("electionevent");
-        gender = request.getParameter("gender");
-        cgpa = Double.parseDouble(request.getParameter("cgpa"));
-        phoneno = request.getParameter("phoneno");
+        EventName = (String)session.getAttribute("EventName");
         rollno = (String)(session.getAttribute("user"));
         position = request.getParameter("position");
-        System.out.println("cgpaform"+cgpa);
-        double cg = CA.getcgpa(rollno);
-        System.out.println("cgpadb"+cg);
-        if(cgpa == cg && cg>=7.0){
-            
-            boolean isapplied = CA.createAP(EventName,position,rollno,name,email,phoneno,gender); 
-            String message;
-            if(isapplied){
-
-            	message="Successfully_applied_for_application";
-                response.sendRedirect("Success_MSG.jsp?success="+message);
-            	
-           }
-            else
-            {	
-            	message="Invalid Entry";
-    			response.sendRedirect("error_pg_msg.jsp?error="+message);
-            }
+        agenda = request.getParameter("agenda");
+        points = request.getParameter("points");
+        boolean isapplied = CA.createAP(EventName,position,rollno,agenda, points); 
+        String message;
+        if(isapplied){
+        	message="Successfully_applied_for_application";
+        	System.out.println("C-msg.jsp: "+message);
+        	response.sendRedirect("Success_MSG.jsp?success="+message);
+       }
+        else{	
+        	message="Invalid Entry";
+        	System.out.println("C-msg.jsp: "+message);
+        	response.sendRedirect("error_pg_msg.jsp?error="+message);
         }
-        
-        else
-        {	
-        	String message="Invalid Entry";
-			response.sendRedirect("error_pg_msg.jsp?error="+message);
-        }
-        
     }
     
     else if(session.getAttribute("fname").equals("application_detail")){
-        
     	page_bit=2;
     	String id = request.getParameter("ID");
-        rollno = (String)(session.getAttribute("rollno"));
+    	String val = (String)session.getAttribute("details");
+    	
+		String arr[] = val.split(":");
+		rollno = arr[0]; 
+		EventName = arr[1];
+		//System.out.println("id at C_msg.jsp:"+id);
+		//System.out.println("rollno in C_MSG at approve:"+rollno);
+		//System.out.println("eventname in C_MSG at approve:"+EventName);
         if(id.equals("0")){
-        	boolean isapproved =CA.approve(rollno);
+        	boolean isapproved =CA.approve(rollno, EventName);
         	if(isapproved){
-        		System.out.println("application approved");
+        		System.out.println("C_msg.jsp: application approved");
             	String message="Application_details";
                 response.sendRedirect("Success_CEO.jsp?success="+message);
             }
             else{
-            	System.out.println("error in approving application");
+            	System.out.println("C_msg.jsp: error in approving application");
             	String message="Invalid Entry";
         		response.sendRedirect("error_page.jsp?error="+message);
             }
         }
         else if(id.equals("1")){
-        	boolean isrejected =CA.reject(rollno);
+        	boolean isrejected =CA.reject(rollno, EventName);
         	if(isrejected){
-        		System.out.println("application rejected");
+        		System.out.println("C_msg.jsp: application rejected");
             	String message="Application_details";
                 response.sendRedirect("Success_CEO.jsp?success="+message);
             }
             else{
-            	System.out.println("error in rejecting application");
+            	System.out.println("C_msg.jsp: error in rejecting application");
             	String message="Invalid Entry";
         		response.sendRedirect("error_page.jsp?error="+message);
             }
@@ -104,10 +91,13 @@ int page_bit=0;
     else if(session.getAttribute("fname").equals("delete_application")){
     	
     	page_bit=3;
-        rollno = (String)(session.getAttribute("user"));
         System.out.println(session.getAttribute("fname"));
-        boolean isdeleted = CA.deleteAP(rollno);
- 
+        String val = request.getParameter("details");
+		String arr[] = val.split(":");
+		rollno = arr[0]; 
+		EventName = arr[1];
+        boolean isdeleted = CA.deleteAP(rollno,EventName);
+ 		
         if (isdeleted) {
         	String message="Successfully deleted";
             response.sendRedirect("Success_MSG.jsp?success="+message);
@@ -122,7 +112,7 @@ int page_bit=0;
     
 }catch(Exception e){
 	
-	if(EventName =="" || name== null || email== null || gender == null || phoneno==null ||rollno==null ||position==null)
+	if(EventName == "" || rollno==null ||position==null)
 	{
 		String message="Invalid input";
 		if(page_bit== 1)
@@ -145,9 +135,6 @@ int page_bit=0;
     
 }
  
-%>
- 
- 
- 
+%> 
 </body>
 </html>

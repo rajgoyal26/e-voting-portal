@@ -106,34 +106,40 @@
 						<div class="12u">
 								<%!ArrayList<String> ApplicantsAdded = new ArrayList<String>();%>
 								<%
-									try 
-									{
-										ApplicantsAdded = (ArrayList<String>) (session.getAttribute("aprollno"));
-										for (int i = 0; i < ApplicantsAdded.size(); i++)
-										{
-											String val = ApplicantsAdded.get(i);
-								%>
-										<div class="content">	
-										  <div class="12u">
-											<form action="application_detail.jsp" method="post">	
-												<input type="submit" width ="100" class="buttons" name="rollno" value="<%=val%>" id="application" onclick="FormValidate()">		
-											</form>	
+								try{
+									Map < String,ArrayList<String> > applications=M_CandidatureApplication.getApplications(0);
+									for (Map.Entry< String,ArrayList<String> > e : applications.entrySet()){
+									String s=e.getKey();
+									System.out.println(s);
+									%><p><%=s%></p>
+									<%  for (String rollno:e.getValue()){
 											
-										  </div>			
-										</div>
-								<%}
-									} 
-									catch (Exception e) 
-									{
-										e.printStackTrace();
+											String val = rollno + ":" + s;
+											%>      
+			
+											<div class="content">
+											 <div class="12u">
+											<form action="application_detail.jsp" method="post">
+											<input type="text" width ="100" class="buttons" name="rollno" readonly value="<%=rollno%>" id="application" >
+											<button type="submit" name="details" value="<%=val%>">Click Here for details</button>
+											</form>
+			
+											 </div>
+											</div>
+											
+											<%
+										}
 									}
+								} 
+								catch (Exception e) {
+									e.printStackTrace();
+								}
 								%>
 						</div>
 					</div>
 					
 					</div>
 					<br/><input type="button" width=100 name="BACK TO CEO-Treminal" value="BACK TO CEO-Treminal" id="viewtoceo" onclick="window.location = 'ceo.jsp';"/>
-
 		</section>
 
 	</article>

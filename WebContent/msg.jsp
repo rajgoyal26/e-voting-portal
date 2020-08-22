@@ -42,11 +42,11 @@
 			response.sendRedirect("index.jsp");
 			return;
 		}
-		ArrayList<String> EventsAdded = new ArrayList<String>();			
+		ArrayList<String>EventsAdded = new ArrayList<String>();			
 		M_ElectionEvent EE = new M_ElectionEvent();		
 		EventsAdded = EE.getEE();		
 		session.setAttribute("EventsAdded",EventsAdded);
-		ArrayList<String> rollno = new ArrayList<String>();
+		ArrayList<ArrayList<String> > rollno = new ArrayList<ArrayList<String> >();
 		M_CandidatePortfolio CP = new M_CandidatePortfolio();
 		rollno =CP.getCP();
 		session.setAttribute("rollno",rollno);

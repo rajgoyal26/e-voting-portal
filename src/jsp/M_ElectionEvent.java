@@ -112,25 +112,19 @@ public class M_ElectionEvent {
 	}
 
 	public ArrayList<String> getEE() {
-
 		Connection c = null;
 		Statement st = null;
 		ResultSet rs = null;
-		ArrayList<String> r = new ArrayList<String>();
-		// r.add("test");
+		ArrayList<String>r = new ArrayList<String>();
 		try {
 			c = MySQL.connect();
 			st = c.createStatement();
 			String query = "select name from electionevent";
 			System.out.println(query);
 			rs = st.executeQuery(query);
-
 			while (rs.next()) {
-				String t = rs.getString(1);
-				System.out.println(t);
-				r.add(t);
+				r.add(rs.getString(1));
 			}
-
 			rs.close();
 			st.close();
 			return r;
@@ -206,21 +200,14 @@ public class M_ElectionEvent {
 		Statement st = null;
 		ResultSet rs = null;
 		ArrayList<String> r = new ArrayList<String>();
-		// r.add("test");
 		try {
 			c = MySQL.connect();
 			st = c.createStatement();
-			String query = "select position from positions where eid =" + eid
-					+ ";";
-			System.out.println(query);
+			String query = "select position from positions where eid =" + eid + ";";
 			rs = st.executeQuery(query);
-
 			while (rs.next()) {
-				String t = rs.getString(1);
-				System.out.println(t);
-				r.add(t);
+				r.add(rs.getString(1));
 			}
-
 			rs.close();
 			st.close();
 			return r;
@@ -307,7 +294,6 @@ public class M_ElectionEvent {
 			while (rs.next()) {
 				 r = rs.getString(1);
 				System.out.println(r);
-				
 			}
 
 			rs.close();
@@ -322,6 +308,29 @@ public class M_ElectionEvent {
 		}
 
 		
+	}
+	public int getEEId(String str) {
+		Connection c = null;
+		Statement st = null;
+		ResultSet rs = null;
+		int r = 0;
+		try {
+			c = MySQL.connect();
+			st = c.createStatement();
+			String query = "select eid from electionevent where name='"+str+"'";
+			rs = st.executeQuery(query);
+			 while(rs.next()) {
+				r=Integer.parseInt(rs.getString(1));
+			}
+			rs.close();
+			st.close();
+			return r;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return r;
+		} finally {
+			MySQL.close(c);
+		}
 	}
 
 }
