@@ -12,10 +12,13 @@
 </head>
 <body>
     <%!String EventName = "name";
+    String AllowedCands="";
     java.sql.Date date = null;
     java.sql.Time startTime = null;
     java.sql.Time endTime = null;
     ArrayList<String> positions = new ArrayList<String>();
+    ArrayList<String> allowedC = new ArrayList<String>();
+    ArrayList<String> allowedB = new ArrayList<String>();
     int page_bit = 0;
     
     // 1 for create_ee 
@@ -55,6 +58,18 @@
                     positions.add(id);
                     System.out.println(id);
                 }
+                String[] ids1 = request.getParameterValues("AllowedCand");
+                for (String id1 : ids1) {
+                    // do something with id, this is checkbox value
+                    allowedC.add(id1);
+                    System.out.println(id1);
+                }
+                String[] ids2 = request.getParameterValues("AllowedBatch");
+                for (String id1 : ids2) {
+                    // do something with id, this is checkbox value
+                    allowedB.add(id1);
+                    System.out.println(id1);
+                }
                 SimpleDateFormat timeformatter = new SimpleDateFormat(
                         "HH:mm:ss");
  
@@ -79,7 +94,7 @@
  
                 else {
                     boolean iscreated = EE.createEE(EventName, date,
-                            startTime, endTime, positions);
+                            startTime, endTime, positions,allowedC,allowedB);
                     String message=null;
                     if (iscreated) {
                     	
@@ -137,7 +152,7 @@
                 Time24HoursValidator time24HoursValidator = new Time24HoursValidator();
                 boolean valid = time24HoursValidator.validate(startTime
                         .toString());
- 
+                allowedC.add(request.getParameter("AllowedCand"));
                 endTime = new java.sql.Time(timeformatter.parse(
                         request.getParameter("endtime")).getTime());
  
@@ -155,7 +170,7 @@
  
                 else {
                     boolean iscreated = EE.updateEE(EventName, date,
-                            startTime, endTime, positions);
+                            startTime, endTime, positions,allowedC,allowedB);
                     String message=null;
                     if (iscreated) {
  

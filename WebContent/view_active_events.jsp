@@ -8,7 +8,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>View_Candidature_Applictions- MBM_ONLINE_VOTING_PORTAL</title>
+<title>View_Active_Events- MBM_ONLINE_VOTING_PORTAL</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -59,7 +59,7 @@
 </head>
 <body class="contact">
 	<% 
-		session.setAttribute("fname", "view_applications");
+		session.setAttribute("fname", "view_active_events");
 		HttpSession session2 = request.getSession(false);
 		if(Session.MultipleSessionCheck((String)session2.getAttribute("user"),(String)session2.getId())==true)
 		{
@@ -67,7 +67,6 @@
 			response.sendRedirect("index.jsp");
 			return;
 		}
-
 	%>
 
 	<!-- Header -->
@@ -92,7 +91,7 @@
 
 		<header class="container">
 			<!-- <span class="icon fa-envelope"></span>-->
-			<h2 align="center">View Candidates Applications</h2>
+			<h2 align="center">View Active Events</h2>
 			<p></p>
 		</header>
 
@@ -104,50 +103,40 @@
 					<div class="row 50%">
 						<!--class= 6u 12u(mobile) -->
 						<div class="12u">
-								<%!ArrayList<String> ApplicantsAdded = new ArrayList<String>();%>
+								
 								<%
-								try{
-									DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-									DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
-									String dates= df.format(new java.util.Date());
-									String time=df2.format(new java.util.Date());
-									Map < String,ArrayList<String> > applications=M_CandidatureApplication.getApplications(0);
-									for (Map.Entry< String,ArrayList<String> > e : applications.entrySet()){
-									String s=e.getKey();
-									System.out.println(s);
-									String datetime[]=M_ElectionEvent.getDateTime(s);
-									if((datetime[0].compareTo(dates)==0&&datetime[2].compareTo(time)>=0)||datetime[0].compareTo(dates)>0)
-									{ System.out.println(s+" "+time);
-									%><p><%=s%></p>
-									<%  for (String rollno:e.getValue()){
-											
-											String val = rollno + ":" + s;
-											%>      
-			
-											<div class="content">
-											 <div class="12u">
-											<form action="application_detail.jsp" method="post">
-											<input type="text" width ="100" class="buttons" name="rollno" readonly value="<%=rollno%>" id="application" >
-											<button type="submit" name="details" value="<%=val%>">Click Here for details</button>
-											</form>
-			
-											 </div>
-											</div>
-											
-											<%
+									try{
+										DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+										DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
+										String dates= df.format(new java.util.Date());
+										String time=df2.format(new java.util.Date());
+										M_CandidatureApplication CA = new M_CandidatureApplication();
+										int batch = CA.getBatch((String) (session.getAttribute("user")));
+										ArrayList<String> alist=M_ElectionEvent.getEvents(batch);
+										for(int i=0;i<alist.size();i++){
+											String datetime[]=M_ElectionEvent.getDateTime(alist.get(i));
+											if((datetime[0].compareTo(dates)==0&&datetime[2].compareTo(time)>=0)){
+											System.out.println(alist.get(i));
+											String s=alist.get(i);
+								%>      
+								<div class="content">
+									<div class="12u">
+										<form action="votingpage.jsp" method="post">
+											<input type="submit" width ="100" class="buttons" name="eventname" readonly value="<%=s%>" />
+										</form>
+									 </div>
+								</div>
+								<%
+									}
 											}
 										}
+									catch (Exception e) {
+										e.printStackTrace();
 									}
-								} 
-								catch (Exception e) {
-									e.printStackTrace();
-								}
 								%>
 						</div>
 					</div>
-					
 					</div>
-					<br/><input type="button" width=100 name="BACK TO CEO-Treminal" value="BACK TO CEO-Treminal" id="viewtoceo" onclick="window.location = 'ceo.jsp';"/>
 		</section>
 
 	</article>

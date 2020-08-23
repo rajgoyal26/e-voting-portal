@@ -106,10 +106,16 @@
 								
 								<%
 									try{
+										DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+										DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
+										String dates= df.format(new java.util.Date());
+										String time=df2.format(new java.util.Date());
 										Map < String,ArrayList<String> > applications=M_CandidatureApplication.getApplications(1);
 										for (Map.Entry< String,ArrayList<String> > e : applications.entrySet()){
 											String s=e.getKey();
-											System.out.println(s);
+											String datetime[]=M_ElectionEvent.getDateTime(s);
+											if((datetime[0].compareTo(dates)==0&&datetime[2].compareTo(time)>=0)||datetime[0].compareTo(dates)>0)
+											{ System.out.println(s+" "+time);
 								%>
 								<p><%=s%></p>
 								<%  
@@ -124,7 +130,7 @@
 										</form>
 									 </div>
 								</div>
-								<%
+								<%}
 									}
 										}
 									}

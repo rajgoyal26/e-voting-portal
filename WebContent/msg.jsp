@@ -219,7 +219,18 @@
 					</section>
 
 				</div>
-				
+				<div class="row">
+				<div class="6u 12u(narrower)" align="center">
+					<section>
+						<header>
+							<h3>
+								<a href="view_active_events.jsp">VIEW ACTIVE EVENTS</a>
+							</h3>
+						</header>
+						<p></p>
+					</section>
+				</div>
+				</div>
 			</div>
 
 			<footer class="major">
