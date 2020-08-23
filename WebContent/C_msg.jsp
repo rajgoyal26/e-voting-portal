@@ -35,13 +35,24 @@
         position = request.getParameter("position");
         agenda = request.getParameter("agenda");
         points = request.getParameter("points");
-        boolean isapplied = CA.createAP(EventName,position,rollno,agenda, points); 
+        int batch_by_rollno = CA.getBatch(rollno);
+        int batch_by_position = CA.getBatch(EventName, position);
+        System.out.println("batch_by_rollno:"+batch_by_rollno);
+        System.out.println("batch_by_position:"+batch_by_position);
         String message;
-        if(isapplied){
-        	message="Successfully_applied_for_application";
-        	System.out.println("C-msg.jsp: "+message);
-        	response.sendRedirect("Success_MSG.jsp?success="+message);
-       }
+        if(batch_by_rollno == batch_by_position){
+	        boolean isapplied = CA.createAP(EventName,position,rollno,agenda, points); 
+	        if(isapplied){
+	        	message="Successfully_applied_for_application";
+	        	System.out.println("C-msg.jsp: "+message);
+	        	response.sendRedirect("Success_MSG.jsp?success="+message);
+	       }
+	        else{	
+	        	message="Invalid Entry";
+	        	System.out.println("C-msg.jsp: error in storing in database");
+	        	response.sendRedirect("error_pg_msg.jsp?error="+message);
+	        }
+        }
         else{	
         	message="Invalid Entry";
         	System.out.println("C-msg.jsp: "+message);
@@ -57,11 +68,13 @@
 		String arr[] = val.split(":");
 		rollno = arr[0]; 
 		EventName = arr[1];
+		position = arr[2];
 		//System.out.println("id at C_msg.jsp:"+id);
 		//System.out.println("rollno in C_MSG at approve:"+rollno);
 		//System.out.println("eventname in C_MSG at approve:"+EventName);
+		//System.out.println("position in C_MSG at approve:"+position);
         if(id.equals("0")){
-        	boolean isapproved =CA.approve(rollno, EventName);
+        	boolean isapproved =CA.approve(rollno, EventName, position);
         	if(isapproved){
         		System.out.println("C_msg.jsp: application approved");
             	String message="Application_details";

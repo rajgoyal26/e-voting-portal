@@ -110,7 +110,7 @@
 			String val = request.getParameter("details");
 			String arr[] = val.split(":");
 			String rollno = arr[0], eventName = arr[1];
-			session.setAttribute("details", val);
+			
 			applicantdetails = CA.getAD(rollno, eventName);
 				
 				String electionevent = applicantdetails.get(0);
@@ -121,7 +121,9 @@
 				String gender="Male";//applicantdetails.get(5);
 				String agenda=applicantdetails.get(2);
 				String points=applicantdetails.get(3);
-				
+				//System.out.println("position in C_MSG at approve:"+position);
+				val+=":"+position;
+				session.setAttribute("details", val);
 				
 				
 			%>

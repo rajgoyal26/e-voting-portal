@@ -135,15 +135,15 @@ public class M_CandidatePortfolio {
 			rsmd = rs.getMetaData();
 			int ss = rsmd.getColumnCount();
 
-			int i = 1;
+			int i = 0;
 			System.out.println(ss);
 			while (rs.next()) {
-				while (i <= ss) {
+				while (i < ss) {
+					i++;
 					String t = rs.getString(i);
 					if(t==null)
 						t="add some value";
 					System.out.println(t);
-					i++;
 					if(i==3||i==4)
 						continue;
 					if (t.equals("P"))

@@ -37,7 +37,7 @@ public class M_ElectionEvent {
 			if(positions.size()==AllowedC.size()) System.out.println("same size");
 			for (int i=0;i<positions.size();i++) {
 
-			for (String position : positions) {
+			
 
 				if ((positions.get(i).equals("President") || positions.get(i).equals("Vice-President")
 						|| positions.get(i).equals("G.Sec"))&&
@@ -58,7 +58,8 @@ public class M_ElectionEvent {
 			rs.close();
 			return true;
 
-		} catch (Exception e) {
+		}
+		 catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		} finally {

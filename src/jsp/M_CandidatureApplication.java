@@ -36,6 +36,47 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
+	
+	public int getBatch(String eventname, String position) {
+		Connection c = null;
+		Statement st = null;
+		ResultSet rs = null;
+		int batch = 0;
+		M_ElectionEvent me = new M_ElectionEvent();
+		int eid = me.getEEId(eventname);
+		try {
+
+			c = MySQL.connect();
+			st = c.createStatement();
+			String query = "select allowedcandidate from positions where eid ="
+					+ eid + " and position ='" + position + "';";
+			System.out.println(query+" M_CA.java");
+			rs = st.executeQuery(query);
+			while (rs.next()) {
+				String temp = rs.getString(1);
+				System.out.println("temp:---------------"+temp);
+				if(temp.equals("UG_First_Year"))
+					batch=1;
+				else if(temp.equals("UG_Second_Year"))
+					batch=2;
+				else if(temp.equals("UG_Third_Year"))
+					batch=3;
+				else if(temp.equals("UG_Fourth_Year"))
+					batch=4;
+				else if(temp.equals("PG"))
+					batch=5;
+					
+			}
+			rs.close();
+			st.close();
+			return batch;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return batch;
+		} finally {
+			MySQL.close(c);
+		}
+	}
 
 	public double getcgpa(String rollno) {
 		rollno = rollno.toUpperCase();
@@ -145,15 +186,15 @@ public class M_CandidatureApplication {
 			rsmd = rs.getMetaData();
 			int ss = rsmd.getColumnCount();
 
-			int i = 1;
+			int i = 0;
 			System.out.println(ss);
 			while (rs.next()) {
-				while (i <= ss) {
+				while (i < ss) {
+					i++;
 					String t = rs.getString(i);
 					if(t==null)
 						t="add some value";
 					System.out.println(t);
-					i++;
 					if(i==3||i==4)
 						continue;
 					if (t.equals("P"))
@@ -179,7 +220,7 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
-	public boolean approve(String rollno, String eventName) {
+	public boolean approve(String rollno, String eventName, String position) {
 		Connection c = null;
 		Statement st = null;
 		try {
@@ -190,8 +231,8 @@ public class M_CandidatureApplication {
 					+ rollno + "' and eventname ='" + eventName +"';" ;
 			System.out.println(query+" M_CA.java");
 			st.executeUpdate(query);
-			query = "insert into candidates (rollno, eventname, haswon) values ('"
-					+ rollno +"', '" + eventName + "',0);";
+			query = "insert into candidates (rollno, eventname, position, votecount) values ('"
+					+ rollno +"', '" + eventName +"', '" + position + "',0);";
 			System.out.println(query+" M_CA.java");
 			st.executeUpdate(query);
 			st.close();
