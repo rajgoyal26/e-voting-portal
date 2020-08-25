@@ -6,7 +6,71 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class M_CandidatureApplication {
-
+	
+	//method which return list of events along with positions in which a applicant or candidate has applied
+	public ArrayList<ArrayList<String> > geteventbyrollno(String rollno, int choice){
+		Connection c = null;
+		Statement st = null;
+		ResultSet rs = null;
+		
+		ArrayList<ArrayList<String> > eventpositionlist = new ArrayList<ArrayList<String> >();
+		try {
+			c = MySQL.connect();
+			st = c.createStatement();
+			String query = "select eventname, appliedforpost from applicants where isapproved = " + choice + " and rollno = '" + rollno +"';";
+			System.out.println("m_CA.java"+ query);
+			rs = st.executeQuery(query);
+			while(rs.next()) {
+				ArrayList<String> temp = new ArrayList<String>();
+				temp.add(rs.getString(1));
+				temp.add(rs.getString(2));
+				eventpositionlist.add(temp);
+			}
+			System.out.println("Successfully sent eventpositionlist in M_CA.java");
+			rs.close();
+			st.close();
+			return eventpositionlist;
+		}
+		catch(Exception e) {
+			System.out.println("error at M_CA.java in geteventbyrollno function");
+			e.printStackTrace();
+			return eventpositionlist;
+		}
+		finally {
+			MySQL.close(c);
+		}
+	}
+	
+	public ArrayList<String> getuserdetails(String rollno){
+		Connection c = null;
+		Statement st = null;
+		ResultSet rs = null;
+		ArrayList<String> detaillist = new ArrayList<String>();
+		try {
+			c = MySQL.connect();
+			st = c.createStatement();
+			String query = "Select name, cgpa, batch, gender, email, mobile from students where verified=1 and rollno='"+rollno+"';";
+			rs = st.executeQuery(query);
+			while(rs.next()) {
+				detaillist.add(rs.getString(1));
+				detaillist.add(rs.getString(2));
+				detaillist.add(rs.getString(3));
+				detaillist.add(rs.getString(4));
+				detaillist.add(rs.getString(5));
+				detaillist.add(rs.getString(6));
+			}
+			return detaillist;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return detaillist;
+		}
+		finally {
+			MySQL.close(c);
+		}
+	}
+	
+	//method to return batch of a student
 	public int getBatch(String rollno) {
 		rollno = rollno.toUpperCase();
 		Connection c = null;
@@ -37,6 +101,8 @@ public class M_CandidatureApplication {
 		}
 	}
 	
+	
+	//method to return batch of which a student can apply in that event and that position
 	public int getBatch(String eventname, String position) {
 		Connection c = null;
 		Statement st = null;
@@ -77,7 +143,9 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
-
+	
+	
+	//method to get cgpa of student
 	public double getcgpa(String rollno) {
 		rollno = rollno.toUpperCase();
 		Connection c = null;
@@ -112,7 +180,8 @@ public class M_CandidatureApplication {
 		}
 
 	}
-
+	
+	//method to create a applicant
 	public boolean createAP(String EventName, String position, String rollno, String agenda, String points) {
 		Connection c = null;
 		Statement st = null;
@@ -138,37 +207,43 @@ public class M_CandidatureApplication {
 
 	}
 
-	public ArrayList<String> getCA() {
-		Connection c = null;
-		Statement st = null;
-		ResultSet rs = null;
-		ArrayList<String> r = new ArrayList<String>();
-		// r.add("test");
-		try {
-			c = MySQL.connect();
-			st = c.createStatement();
-			String query = "select rollno from applicants where isapproved=0 ";
-			//System.out.println(query+" M_CA.java");
-			rs = st.executeQuery(query);
-
-			while (rs.next()) {
-				String t = rs.getString(1);
-				//System.out.println(t);
-				r.add(t);
-			}
-
-			rs.close();
-			st.close();
-			return r;
-
-		} catch (Exception e) {
+	//method which return applicants or candidates according to events 
+	public static Map < String,ArrayList<String> > getApplications(int choice){
+	    Connection c = null;
+			Statement st = null;
+			ResultSet rs = null;
+			String rollno;
+			String eventname;
+			Map < String,ArrayList<String> > applications=new HashMap < String,ArrayList<String> >();
+			try {
+				c = MySQL.connect();
+				st = c.createStatement();
+				String query = "select eventname,rollno from applicants where isapproved = "+choice;
+				System.out.println(query);
+				rs = st.executeQuery(query);
+				while(rs.next()){
+					eventname=rs.getString(1);
+					rollno= rs.getString(2);
+					if(applications.containsKey(eventname)){
+						applications.get(eventname).add(rollno);
+					}
+					else{
+						applications.put(eventname,new ArrayList<String>());
+						applications.get(eventname).add(rollno);
+					}	
+				}
+				rs.close();
+				st.close();
+				return applications;
+			} catch (Exception e) {
 			e.printStackTrace();
-			return r;
-		} finally {
+			return applications;
+			} finally {
 			MySQL.close(c);
-		}
-	}
+			}   
+	    }
 
+	//method which return applicant details according to eventname
 	public ArrayList<String> getAD(String rollno, String eventName) {
 		Connection c = null;
 		Statement st = null;
@@ -179,7 +254,7 @@ public class M_CandidatureApplication {
 		try {
 			c = MySQL.connect();
 			st = c.createStatement();
-			String query = "select * from applicants where rollno = '" + rollno
+			String query = "select * from applicants where isapproved=0 and rollno = '" + rollno
 					+ "' and eventname ='" + eventName +"';" ;
 			System.out.println(query+" M_CA.java");
 			rs = st.executeQuery(query);
@@ -220,6 +295,8 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
+	
+	//method to approve an applicant to become a candidate
 	public boolean approve(String rollno, String eventName, String position) {
 		Connection c = null;
 		Statement st = null;
@@ -245,6 +322,8 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
+	
+	//method to reject an applicant
 	public boolean reject(String rollno, String eventName) {
 		Connection c = null;
 		Statement st = null;
@@ -269,49 +348,18 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
-	public boolean isApplicant(String rollno) {
-		Connection c = null;
-		Statement st = null;
-		ResultSet rs = null;
-		try {
-			c = MySQL.connect();
-			st = c.createStatement();
-			rollno = rollno.toUpperCase();
-			String query = "select * from applicants where rollno ='" + rollno
-					+ "';";
-			System.out.println(query+" M_CA.java");
-			rs = st.executeQuery(query);
-			if (rs.absolute(1)) {
-				
-				rs.close();
-				st.close();
-				return true;
-			}
-			else{
-				rs.close();
-				st.close();
-				return false;		
-			}
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} 
-		finally {
-			MySQL.close(c);
-		}
-	}
-
+	
+	
+	//method to delete an applicant
 	public boolean deleteAP(String rollno, String eventName) {
+		System.out.println("delete function called by:"+rollno+"    "+eventName);
 		Connection c = null;
 		try {
 			c = MySQL.connect();
 			Statement st = c.createStatement();
-			String query = "delete from candidates where rollno = '" + rollno
+			String query1 = "delete from applicants where isapproved=0 and rollno = '" + rollno
 					+ "' and eventname ='" + eventName +"';" ;
-			String query1 = "delete from applicants where isapproved=1 and rollno = '" + rollno
-					+ "' and eventname ='" + eventName +"';" ;
-			st.executeUpdate(query);
+			System.out.println(query1);
 			st.executeUpdate(query1);
 			st.close();
 			return true;
@@ -322,72 +370,5 @@ public class M_CandidatureApplication {
 			MySQL.close(c);
 		}
 	}
-	public static Map < String,ArrayList<String> > getApplications(int choice){
-    Connection c = null;
-		Statement st = null;
-		ResultSet rs = null;
-		String rollno;
-		String eventname;
-		Map < String,ArrayList<String> > applications=new HashMap < String,ArrayList<String> >();
-		try {
-			c = MySQL.connect();
-			st = c.createStatement();
-			String query = "select eventname,rollno from applicants where isapproved = "+choice;
-			System.out.println(query);
-			rs = st.executeQuery(query);
-			while(rs.next()){
-				eventname=rs.getString(1);
-				rollno= rs.getString(2);
-				if(applications.containsKey(eventname)){
-					applications.get(eventname).add(rollno);
-				}
-				else{
-					applications.put(eventname,new ArrayList<String>());
-					applications.get(eventname).add(rollno);
-				}	
-			}
-			rs.close();
-			st.close();
-			return applications;
-		} catch (Exception e) {
-		e.printStackTrace();
-		return applications;
-		} finally {
-		MySQL.close(c);
-		}   
-    }
 	
-/*	public String getRollno(String name){
-		Connection c = null;
-		Statement st = null;
-		ResultSet rs = null;
-		String rollno = null;
-		try {
-			c = MySQL.connect();
-			st = c.createStatement();
-			String query = "select rollno from applicants where name ='" + name
-					+ "';";
-			System.out.println(query+" M_CA.java");
-			rs = st.executeQuery(query);
-			while(rs.next()){
-				rollno= rs.getString(1);
-				
-			}
-			
-			rs.close();
-			st.close();
-			return rollno;
-			
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			return rollno;
-
-		} finally {
-
-			MySQL.close(c);
-		}
-
-	}*/
 }

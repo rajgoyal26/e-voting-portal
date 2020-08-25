@@ -1,4 +1,3 @@
-
 <%@page import="jsp.*,java.util.*"%>
 <%@ include file="noCache.jsp"%>
 
@@ -9,7 +8,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>View_Candidate_Portfolios- MBM_ONLINE_VOTING_PORTAL</title>
+<title>VIEW_YOUR_APPLICATIONS- MBM_ONLINE_VOTING_PORTAL</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -60,7 +59,7 @@
 </head>
 <body class="contact">
 	<% 
-		session.setAttribute("fname", "view_applications");
+		//session.setAttribute("fname", "delete_applications");
 		HttpSession session2 = request.getSession(false);
 		if(Session.MultipleSessionCheck((String)session2.getAttribute("user"),(String)session2.getId())==true)
 		{
@@ -92,7 +91,7 @@
 
 		<header class="container">
 			<!-- <span class="icon fa-envelope"></span>-->
-			<h2 align="center">View Candidates Portfolio</h2>
+			<h2 align="center">VIEW YOUR APPLICATIONS</h2>
 			<p></p>
 		</header>
 
@@ -111,36 +110,39 @@
 										DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
 										String dates= df.format(new java.util.Date());
 										String time=df2.format(new java.util.Date());
-										Map < String,ArrayList<String> > applications=M_CandidatureApplication.getApplications(1);
-										for (Map.Entry< String,ArrayList<String> > e : applications.entrySet()){
-											String s=e.getKey();
-											String datetime[]=M_ElectionEvent.getDateTime(s);
-											if((datetime[0].compareTo(dates)==0&&datetime[2].compareTo(time)>=0)||datetime[0].compareTo(dates)>0)
-											{ System.out.println(s+" "+time);
+										String rollno = (String)session.getAttribute("user");
+										M_CandidatureApplication CA = new M_CandidatureApplication();
+										ArrayList<ArrayList<String> > elist = CA.geteventbyrollno(rollno,1);
+										for(int i=0;i<elist.size();i++){
+											String eventname = elist.get(i).get(0);
+											String position = elist.get(i).get(1);
+											String datetime[]=M_ElectionEvent.getDateTime(eventname);
+											System.out.println("currentdate:"+dates);
+											System.out.println("eventtdate:"+datetime[0]);
+											if(df.parse(dates).before(df.parse(datetime[0]))){ 
+												System.out.println(eventname+" "+position);
+												String val = rollno+":"+eventname+":"+position;
+												session.setAttribute("details",val);
 								%>
-								<p><%=s%></p>
-								<%  
-									for (String rollno:e.getValue()){
-										String val = rollno + ":" + s;
-										session.setAttribute("details",val);
-								%>      
 								<div class="content">
 									<div class="12u">
-										<form action="view_cpdetails.jsp" method="post">
-											<input type="text" width ="100" class="buttons" name="rollno" readonly value="<%=rollno%>" id="application" >
-											<button type="submit" name="details" value="<%=val%>">Click Here for details</button>
+										<form action="C_candidate.jsp" method="post">
+											<input type="text" width ="100" class="buttons" name="eventname" readonly value="<%=eventname%>" id="application" >
+											<input type="text" width ="100" class="buttons" name="position" readonly value="<%=position%>" id="application" ><br/>
+											<input type="button" class="special" value="View" onclick="window.location.href = 'view_cpdetails.jsp'" /><br/>
+											<input type="submit" class="special" value="Delete" /><% session.setAttribute("fname","view_candidate_portfolio"); %>
 										</form>
 									 </div>
 								</div>
 								<%}
 									}
-										}
 									}
 									catch (Exception e) {
 										e.printStackTrace();
 									}
 								%>
 						</div>
+						<div><input type="button" class="special" value="Back" onclick="window.location.href = 'msg.jsp'" /></div>
 					</div>
 					</div>
 		</section>

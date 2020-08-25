@@ -40,7 +40,7 @@
         System.out.println("batch_by_rollno:"+batch_by_rollno);
         System.out.println("batch_by_position:"+batch_by_position);
         String message;
-        if(batch_by_rollno == batch_by_position){
+        if(batch_by_position==0||batch_by_rollno == batch_by_position){
 	        boolean isapplied = CA.createAP(EventName,position,rollno,agenda, points); 
 	        if(isapplied){
 	        	message="Successfully_applied_for_application";
@@ -105,10 +105,11 @@
     	
     	page_bit=3;
         System.out.println(session.getAttribute("fname"));
-        String val = request.getParameter("details");
+        String val = (String)session.getAttribute("details");
 		String arr[] = val.split(":");
 		rollno = arr[0]; 
 		EventName = arr[1];
+		System.out.println("calling delete function for rollno, eventname:"+rollno+"   "+ EventName);
         boolean isdeleted = CA.deleteAP(rollno,EventName);
  		
         if (isdeleted) {

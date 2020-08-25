@@ -122,6 +122,7 @@
 									<%  for (String rollno:e.getValue()){
 											
 											String val = rollno + ":" + s;
+											session.setAttribute("details",val);
 											%>      
 			
 											<div class="content">

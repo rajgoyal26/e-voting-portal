@@ -38,14 +38,6 @@
 		M_ElectionEvent EE = new M_ElectionEvent();
 		EventsAdded = EE.getEE();
 		session.setAttribute("EventsAdded",EventsAdded);
-		ArrayList<String> aprollno = new ArrayList<String>();
-		M_CandidatureApplication CA = new M_CandidatureApplication();
-		aprollno =CA.getCA();
-		session.setAttribute("aprollno",aprollno);
-		ArrayList<ArrayList<String> > rollno = new ArrayList<ArrayList<String> >();
-		M_CandidatePortfolio CP = new M_CandidatePortfolio();
-		rollno =CP.getCP();
-		session.setAttribute("rollno",rollno);
 			
 	%>
 
@@ -163,18 +155,6 @@
 						<header>
 							<h3>
 								<a href="delete_ee.jsp">DELETE ELECTION EVENT</a>
-							</h3>
-						</header>
-						<p></p>
-					</section>
-
-				</div>
-				<div class="6u 12u(narrower)">
-
-					<section>
-						<header>
-							<h3>
-								<a href=#>ABORT ELECTION EVENT</a>
 							</h3>
 						</header>
 						<p></p>

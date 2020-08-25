@@ -105,7 +105,7 @@
 			applicantdetails = CA.getAD(rollno);
 			session.setAttribute("rollno", rollno);	 */
 			M_CandidatePortfolio CP= new M_CandidatePortfolio();
-			String val = request.getParameter("details");
+			String val = (String)session.getAttribute("details");
 			//System.out.println("details at view_cpdetails.jsp------"+val);
 			session.setAttribute("details",val);
 			String arr[] = val.split(":");
@@ -113,14 +113,17 @@
 			ArrayList<String> candidatedetails = new ArrayList<String>();
 			session.setAttribute("rollno", rollno);	
 			candidatedetails = CP.getPD(rollno,eventName);
-			
-			
+			M_CandidatureApplication CA = new M_CandidatureApplication();
+			ArrayList<String> userdetails = new ArrayList<String>();
+			userdetails = CA.getuserdetails(rollno);
 				String electionevent = candidatedetails.get(0);
 				String position= candidatedetails.get(1);
-				String name= "Name of Candidate";//candidatedetails.get(2);
-				String email= "Email of Candidate";//candidatedetails.get(3);
-				String phoneno= "Phone of Candidate";//candidatedetails.get(4);
-				String gender= "Gendder of Candidate";//candidatedetails.get(5);
+				String name=userdetails.get(0);//applicantdetails.get(2);
+				String cgpa = userdetails.get(1);
+				String batch = userdetails.get(2);
+				String email=userdetails.get(4);//applicantdetails.get(3);
+				String phoneno=userdetails.get(5);//applicantdetails.get(4);
+				String gender=userdetails.get(3);//applicantdetails.get(5);
 			    String agenda= candidatedetails.get(2);
 			    String points= candidatedetails.get(3);
 			    //byte[] imgData=CP.getImage(rollno);

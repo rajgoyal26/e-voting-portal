@@ -1,15 +1,14 @@
-
 <%@page import="jsp.*,java.util.*"%>
 <%@ include file="noCache.jsp"%>
-
-<%@page import="jsp.*,java.sql.*,java.util.*,java.text.*"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<!--
+AUTHOR                   : LNMIIT_ONLINE_VOTING_SYSTEM_TEAM
+LAST MODIFIED DATE       : 17-APRIL-2015
+-->
 
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>View_Candidate_Portfolios- MBM_ONLINE_VOTING_PORTAL</title>
+<title>Verify_account- MBM_ONLINE_VOTING_PORTAL</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -25,7 +24,7 @@
 <script src="js/skel.min.js"></script>
 <script src="js/skel-layers.min.js"></script>
 <script src="js/init.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <link rel="stylesheet" href="css/skel.css" />
 <link rel="stylesheet" href="css/style.css" />
 <link rel="stylesheet" href="css/style-wide.css" />
@@ -50,26 +49,8 @@
 	background-size: 75em, 60em, auto, cover;
 }
 </style>
-<script type="text/javascript">
-	function FormValidate()
-	{
-		
-	}
-</script>
-
 </head>
 <body class="contact">
-	<% 
-		session.setAttribute("fname", "view_applications");
-		HttpSession session2 = request.getSession(false);
-		if(Session.MultipleSessionCheck((String)session2.getAttribute("user"),(String)session2.getId())==true)
-		{
-			System.out.println("different session--2");
-			response.sendRedirect("index.jsp");
-			return;
-		}
-	%>
-
 	<!-- Header -->
 	<header id="header" class="alt">
 		<h1 id="logo">
@@ -92,8 +73,8 @@
 
 		<header class="container">
 			<!-- <span class="icon fa-envelope"></span>-->
-			<h2 align="center">View Candidates Portfolio</h2>
-			<p></p>
+			<h2 align="center">Verify your Registration</h2>
+			<p class="lead">Please Check your email for otp</p>
 		</header>
 
 		<!-- One -->
@@ -101,48 +82,18 @@
 
 			<!-- Content -->
 			<div class="content">
-					<div class="row 50%">
-						<!--class= 6u 12u(mobile) -->
+				<form id="activate-account-form" name="activate-account-form" action="activateAccount.jsp" method="post">
+					<input type="text" placeholder="one time password" name="otp" size="20" value="">
+					<div class="row">
 						<div class="12u">
-								
-								<%
-									try{
-										DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-										DateFormat df2 = new SimpleDateFormat("HH:mm:ss");
-										String dates= df.format(new java.util.Date());
-										String time=df2.format(new java.util.Date());
-										Map < String,ArrayList<String> > applications=M_CandidatureApplication.getApplications(1);
-										for (Map.Entry< String,ArrayList<String> > e : applications.entrySet()){
-											String s=e.getKey();
-											String datetime[]=M_ElectionEvent.getDateTime(s);
-											if((datetime[0].compareTo(dates)==0&&datetime[2].compareTo(time)>=0)||datetime[0].compareTo(dates)>0)
-											{ System.out.println(s+" "+time);
-								%>
-								<p><%=s%></p>
-								<%  
-									for (String rollno:e.getValue()){
-										String val = rollno + ":" + s;
-										session.setAttribute("details",val);
-								%>      
-								<div class="content">
-									<div class="12u">
-										<form action="view_cpdetails.jsp" method="post">
-											<input type="text" width ="100" class="buttons" name="rollno" readonly value="<%=rollno%>" id="application" >
-											<button type="submit" name="details" value="<%=val%>">Click Here for details</button>
-										</form>
-									 </div>
-								</div>
-								<%}
-									}
-										}
-									}
-									catch (Exception e) {
-										e.printStackTrace();
-									}
-								%>
+							<ul class="buttons">
+								<li><input type="submit" class="special" value="Confirm OTP"/></li>
+							</ul>
 						</div>
 					</div>
-					</div>
+				</form>
+			</div>
+
 		</section>
 
 	</article>

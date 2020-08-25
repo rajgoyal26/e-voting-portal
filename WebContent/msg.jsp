@@ -5,7 +5,7 @@
 
 <html>
 <head>
-<title>Student_Terminal: LNMIIT ONLINE VOTING SYSTEM</title>
+<title>Student_Terminal: MBM ONLINE VOTING SYSTEM</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -47,16 +47,6 @@
 		EventsAdded = EE.getEE();		
 		session.setAttribute("EventsAdded",EventsAdded);
 		ArrayList<ArrayList<String> > rollno = new ArrayList<ArrayList<String> >();
-		M_CandidatePortfolio CP = new M_CandidatePortfolio();
-		rollno =CP.getCP();
-		session.setAttribute("rollno",rollno);
-		
-		if(session.getAttribute("fname")== "update_portfolio")
-		{%>
-			<script>
-				alert("Successfully Updated");
-			</script>
-		<%}
 	%>
 
 	<!-- Header -->
@@ -160,7 +150,7 @@
 					<section>
 						<header>
 							<h3>
-								<a href="delete_ap.jsp">DELETE YOUR APPLICATION</a>
+								<a href="view_your_ap.jsp">VIEW YOUR APPLICATIONS</a>
 							</h3>
 						</header>
 						<p></p>
@@ -186,27 +176,26 @@
 					<section>
 						<header>
 							<h3>
-								<a href="delete_ap.jsp">DELETE YOUR CANDIDATURE</a>
+								<a href="view_your_candidature.jsp">VIEW YOUR CANDIDATURES</a>
 							</h3>
 						</header>
 						<p></p>
 					</section>
 
 				</div>
-			</div>
-			<div class="row">
+				
 				<div class="6u 12u(narrower)" align="center">
-
 					<section>
 						<header>
 							<h3>
-								<a href="update_portfolio.jsp">UPDATE PORTFOLIO</a>
+								<a href="view_active_events.jsp">Voting</a>
 							</h3>
 						</header>
 						<p></p>
 					</section>
-
 				</div>
+				
+			</div>
 				<div class="6u 12u(narrower)">
 
 					<section>
@@ -219,19 +208,6 @@
 					</section>
 
 				</div>
-				<div class="row">
-				<div class="6u 12u(narrower)" align="center">
-					<section>
-						<header>
-							<h3>
-								<a href="view_active_events.jsp">VIEW ACTIVE EVENTS</a>
-							</h3>
-						</header>
-						<p></p>
-					</section>
-				</div>
-				</div>
-			</div>
 
 			<footer class="major">
 				<ul class="buttons">

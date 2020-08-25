@@ -8,7 +8,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>View_Active_Events- MBM_ONLINE_VOTING_PORTAL</title>
+<title>Active_Events- MBM_ONLINE_VOTING_PORTAL</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta name="description" content="" />
 <meta name="keywords" content="" />
@@ -114,15 +114,16 @@
 										int batch = CA.getBatch((String) (session.getAttribute("user")));
 										ArrayList<String> alist=M_ElectionEvent.getEvents(batch);
 										for(int i=0;i<alist.size();i++){
+											//System.out.println("-----------------------------"+alist.get(i));
 											String datetime[]=M_ElectionEvent.getDateTime(alist.get(i));
 											if((datetime[0].compareTo(dates)==0&&datetime[2].compareTo(time)>=0)){
-											System.out.println(alist.get(i));
+											//System.out.println("+++++++++++++++++++++++++++++++++++"+alist.get(i));
 											String s=alist.get(i);
 								%>      
 								<div class="content">
 									<div class="12u">
 										<form action="votingpage.jsp" method="post">
-											<input type="submit" width ="100" class="buttons" name="eventname" readonly value="<%=s%>" />
+											<input type="submit" width ="100" class="buttons" name="eventname" readonly value="<%=s%>" id="application" />
 										</form>
 									 </div>
 								</div>
