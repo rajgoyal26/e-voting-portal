@@ -1,3 +1,2 @@
 # e-voting-portal
-hamare bhaiya ka khudka voting portal hai, puri security ko dhyan rkhte hue banaya jaa rha hai.
-JAI SHREE RAM.
+Online voting portal developed in jsp and can be used in univeristy elections.
